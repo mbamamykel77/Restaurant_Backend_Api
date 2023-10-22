@@ -1,1 +1,0 @@
-// All authorization here
