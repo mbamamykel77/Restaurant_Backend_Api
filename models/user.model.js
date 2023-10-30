@@ -4,11 +4,11 @@ const userSchema = new Schema(
   {
     fullName: {
       type: String,
-      required: [true, "please tell us your name"],
+      required: [false, "please tell us your name"],
     },
     email: {
       type: String,
-      required: [true, "please tell us your email address"],
+      required: [false, "please tell us your email address"],
       unique: true,
       lowercase: true,
       validator: {
@@ -28,13 +28,17 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: [true, "please provide a password"],
+      required: [false, "please provide a password"],
       minlength: 6,
     },
     confirmPassword: {
       type: String,
-      required: [true, "Confirmation of the user's password"],
+      required: [false, "Confirmation of the user's password"],
       minlength: 6,
+    },
+    googleId: {
+      type: String,
+      unique: true,
     },
   },
   {
