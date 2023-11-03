@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 import passport from "passport";
-import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
+import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import User from "../../models/user.model.js";
-
 
 const findOrCreate = async (profile, done) => {
   try {
@@ -11,23 +10,22 @@ const findOrCreate = async (profile, done) => {
 
     if (existingUser) {
       done(null, existingUser);
+      
     } else {
-
       const newUser = new User({
         googleId: profile.id,
         email: profile.email, // Extract email from Google profile
-        fullName: profile.displayName // Extract displayName from Google profile
+        fullName: profile.displayName, // Extract displayName from Google profile
       });
 
       await newUser.save();
       done(null, newUser);
     }
   } catch (err) {
-    console.error(err)
+    console.error(err);
     done(err);
   }
 };
-
 
 passport.use(
   new GoogleStrategy(
@@ -43,10 +41,12 @@ passport.use(
   )
 );
 
-passport.serializeUser ((user, done) => {
-    done(null, user)
-})
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
 
-passport.deserializeUser ((user, done) => {
-    done(null, user)
-})
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(err, user);
+  });
+});

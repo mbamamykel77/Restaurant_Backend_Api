@@ -8,3 +8,7 @@ export const connectDB = {
 export const bcryptConfig = {
   bcrypt_salt_round: +process.env.BCRYPT_SALT_ROUND,
 };
+
+export const jwtConfig = {
+  jwt_key: process.env.JWT_SECRET
+}

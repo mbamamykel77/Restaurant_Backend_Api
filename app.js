@@ -5,12 +5,15 @@ import { router as authRouter } from "./router/auth.route.js";
 import passport from "passport";
 import "./controllers/userController/google.auth.js";
 import session from "express-session";
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 
 
 app.use(express.json());
+app.use(cookieParser());
+
 
 // session
 app.use(session ({
