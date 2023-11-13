@@ -3,6 +3,7 @@ import passport from "passport";
 import userController from "../controllers/userController/user.auth.js";
 import userloginController from "../controllers/userController/user.login.js";
 import "../controllers/userController/google.auth.js";
+import authUser from "../middlewares/userAuth/authUser.js";
 
 const router = express.Router();
 
@@ -26,12 +27,12 @@ router.get(
   "/google/redirect",
   passport.authenticate("google", {
     successRedirect: "/viviskitchen/google/success",
-    failureRedirect: "/viviskitchen/google/success",
+    failureRedirect: "/viviskitchen/google/failure",
   })
 );
 
 // callback route after successful sign up/ login with the google service
-router.get("/google/success", (req, res) => {
+router.get("/google/success", authUser, (req, res) => {
   res.send("you have reached the callback uri");
 });
 router.get("/google/failure", (req, res) => {
