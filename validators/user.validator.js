@@ -26,6 +26,7 @@ export const signupValidator = Joi.object({
     }),
   mobile: Joi.string(),
   referralCode: Joi.string(),
+  role: Joi.string().valid('user', 'admin', 'superadmin').optional(),
 }).strict()
 
 

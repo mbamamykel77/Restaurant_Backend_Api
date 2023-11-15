@@ -13,7 +13,7 @@ const findOrCreate = async (profile, done) => {
       
     } else {
       const newUser = new User({
-        googleId: profile.id,
+        googleId: profile.id || null,
         email: profile.email, // Extract email from Google profile
         fullName: profile.displayName, // Extract displayName from Google profile
       });

@@ -3,7 +3,7 @@ import { signinValidator } from "../../validators/user.validator.js";
 import bcrypt from "bcrypt"
 import { genToken } from "../../utils/jwt.utils.js";
 
-export default class userloginController {
+export default class superadminloginController {
   static async signin(req, res) {
     const { error } = signinValidator.validate(req.body);
     if (error) {
@@ -33,7 +33,7 @@ export default class userloginController {
 
       res.status(200).json({
         status: "success",
-        message: "user login successful",
+        message: "superadmin login successful",
         data: user,
         login_token: genToken(user)
       });

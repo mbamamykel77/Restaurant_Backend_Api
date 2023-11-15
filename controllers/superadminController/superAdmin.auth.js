@@ -1,9 +1,10 @@
 import User from "../../models/user.model.js";
-import { signupValidator } from "../../validators/user.validator.js";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 import { bcryptConfig } from "../../db/connect.js";
+import { signupValidator } from "../../validators/user.validator.js";
 
-export default class userController {
+// Superadmin setup script
+export default class superadminController {
   static async signup(req, res) {
     const { error } = signupValidator.validate(req.body);
     if (error) {
@@ -11,34 +12,33 @@ export default class userController {
     }
 
     try {
-      const emailExist = await User.find({ email: req.body.email });
+      const existingSuperadmin = await User.findOne({ role: "superadmin" });
 
-      if (emailExist.length > 0) {
+      if (existingSuperadmin) {
         return res.status(409).json({
           status: "failed",
-          message: "An account with this email already exists",
+          message: "Superadmin already exists",
         });
       }
 
-      const saltRound = bcryptConfig.bcrypt_salt_round
+      const saltRound = bcryptConfig.bcrypt_salt_round;
       const hashedPassword = bcrypt.hashSync(req.body.password, saltRound);
 
-      const user = {
+      const superadmin = new User({
         fullName: req.body.fullName,
         email: req.body.email,
         mobile: req.body.mobile,
         referralCode: req.body.referralCode,
         password: hashedPassword,
-        confirmPassword: hashedPassword
-      };
+        confirmPassword: hashedPassword,
+        role: "superadmin",
+      });
 
-      const newUser = await User.create(user);
-      res.status(200).json({
-        status: "Success",
-        message: "User signup successful",
-        data: {
-          user: newUser,
-        },
+      await superadmin.save();
+      res.status(201).json({
+        data: superadmin,
+        status: "success",
+        message: "Superadmin has been created",
       });
     } catch (error) {
       console.log(error);
